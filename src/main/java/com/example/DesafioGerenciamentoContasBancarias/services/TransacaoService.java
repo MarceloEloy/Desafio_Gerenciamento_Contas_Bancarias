@@ -1,12 +1,10 @@
 package com.example.DesafioGerenciamentoContasBancarias.services;
 
 import com.example.DesafioGerenciamentoContasBancarias.model.Conta;
-import com.example.DesafioGerenciamentoContasBancarias.model.DTOS.ContaDTO;
 import com.example.DesafioGerenciamentoContasBancarias.model.DTOS.TransacaoDTO;
 import com.example.DesafioGerenciamentoContasBancarias.model.Transacao;
 import com.example.DesafioGerenciamentoContasBancarias.model.enums.TipoConta;
 import com.example.DesafioGerenciamentoContasBancarias.model.enums.TipoTransacao;
-import com.example.DesafioGerenciamentoContasBancarias.repositorys.ContaRepository;
 import com.example.DesafioGerenciamentoContasBancarias.repositorys.TransacaoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +14,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -46,7 +42,7 @@ public class TransacaoService {
         if (transacao.getTipo().equals(TipoTransacao.DEPOSITO)){
 
             destinatario.setSaldo(destinatario.getSaldo().add(dto.getValor()));
-            contaService.realizarOperacao(destinatario);
+            contaService.alterarSaldo(destinatario);
 
             log.info("Realizada operação de deposito na conta [{}]", destinatario.getId());
 
@@ -54,7 +50,7 @@ public class TransacaoService {
             if (destinatario.getSaldo().add(limite).doubleValue() > dto.getValor().doubleValue()) {
 
                 destinatario.setSaldo(destinatario.getSaldo().subtract(dto.getValor()));
-                contaService.realizarOperacao(destinatario);
+                contaService.alterarSaldo(destinatario);
 
                 log.info("Realizada operação de saque na conta [{}]", destinatario.getId());
 
@@ -65,7 +61,7 @@ public class TransacaoService {
             if (destinatario.getSaldo().doubleValue() > dto.getValor().doubleValue()){
 
                 destinatario.setSaldo(destinatario.getSaldo().subtract(dto.getValor()));
-                contaService.realizarOperacao(destinatario);
+                contaService.alterarSaldo(destinatario);
 
                 log.info("Realizada operação de deposito na conta [{}]", destinatario.getId());
 
@@ -97,11 +93,16 @@ public class TransacaoService {
 
         if (remetente.getTipo().equals(TipoConta.CONTA_CORRENTE)){
             if (remetente.getSaldo().add(limite).doubleValue() > dto.getValor().doubleValue()){
-                
-                remetente.setSaldo(remetente.getSaldo().subtract(dto.getValor()));
-                destinatario.setSaldo(destinatario.getSaldo().add(dto.getValor()));
-                contaService.realizarOperacao(remetente);
-                contaService.realizarOperacao(destinatario);
+
+                try {
+                    remetente.setSaldo(remetente.getSaldo().subtract(dto.getValor()));
+                    destinatario.setSaldo(destinatario.getSaldo().add(dto.getValor()));
+                    contaService.alterarSaldo(remetente);
+                    contaService.alterarSaldo(destinatario);
+                }catch (NullPointerException e){
+                    return ResponseEntity.badRequest().body("Remetente e(ou) Destinatario não podem ser nulos");
+                }
+
 
                 log.info("Realizada operação de transação entra as conta [{}] e [{}]", destinatario.getId(), remetente.getId());
             }
@@ -111,10 +112,14 @@ public class TransacaoService {
         }else if (remetente.getTipo().equals(TipoConta.CONTA_POUPANCA)) {
             if (remetente.getSaldo().doubleValue() > dto.getValor().doubleValue()) {
 
-                remetente.setSaldo(remetente.getSaldo().subtract(dto.getValor()));
-                destinatario.setSaldo(destinatario.getSaldo().add(dto.getValor()));
-                contaService.realizarOperacao(remetente);
-                contaService.realizarOperacao(destinatario);
+                try {
+                    remetente.setSaldo(remetente.getSaldo().subtract(dto.getValor()));
+                    destinatario.setSaldo(destinatario.getSaldo().add(dto.getValor()));
+                    contaService.alterarSaldo(remetente);
+                    contaService.alterarSaldo(destinatario);
+                }catch (NullPointerException e){
+                    return ResponseEntity.badRequest().body("Remetente e(ou) Destinatario não podem ser nulos");
+                }
 
                 log.info("Realizada operação de transação entra as conta [{}] e [{}]", destinatario.getId(), remetente.getId());
             } else {
@@ -132,6 +137,29 @@ public class TransacaoService {
         return ResponseEntity.created(uri).body(transacao);
     };
 
+    public ResponseEntity aplicarJuros(Long destinatarioId, Double taxa) throws URISyntaxException {
+
+        Transacao transacao = new Transacao();
+
+        Conta destinatario = contaService.findContaById(destinatarioId).getBody();
+
+        if (destinatario.getSaldo().doubleValue() < 0 && taxa > 0){
+
+            destinatario.setSaldo(destinatario.getSaldo().subtract(destinatario.getSaldo()).multiply(BigDecimal.valueOf(taxa)).divide(BigDecimal.valueOf(-100)));
+            contaService.alterarSaldo(destinatario);
+
+            transacao.setData(Timestamp.valueOf(LocalDateTime.now()));
+            transacao.setDestinatario(destinatario);
+            transacaoRepository.save(transacao);
+
+            URI uri = new URI("/transacao/" + transacao.getId());
+
+            return ResponseEntity.created(uri).body(transacao);
+        }else{
+            return ResponseEntity.badRequest().body("Saldo necessita ser negativo e porcentagem necessita ser positiva");
+        }
+    }
+
     public ResponseEntity aplicarRendimentoMensal(TransacaoDTO dto, Double taxa) throws URISyntaxException {
 
         Transacao transacao = new Transacao(dto);
@@ -142,7 +170,7 @@ public class TransacaoService {
 
             destinatario.setSaldo(destinatario.getSaldo().add(destinatario.getSaldo().multiply(BigDecimal.valueOf(taxa)).divide(BigDecimal.valueOf(100))));
 
-            contaService.realizarOperacao(destinatario);
+            contaService.alterarSaldo(destinatario);
 
             log.info("Realizada operação de aplicar rendimento mensal na conta [{}]", destinatario.getId());
         }else {
@@ -156,7 +184,7 @@ public class TransacaoService {
         URI uri = new URI("/transacao/" + transacao.getId());
 
         return ResponseEntity.created(uri).body(transacao);
-    }
+    };
 
     public ResponseEntity<Transacao> findTransacaoById(Long id){
         return ResponseEntity.ok(transacaoRepository.findById(id).get());

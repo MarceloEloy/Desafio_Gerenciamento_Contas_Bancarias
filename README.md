@@ -61,6 +61,8 @@ Web API feita em Java 8 com o Spring Framework com foco na criação de relaçã
 
 #### http://localhost:8080/transacao/add/rendimento/{taxa}
 
+#### http://localhost:8080/transacao/add/juros?destinatario=&taxa=
+
 #### Requisição Get
 
 #### http://localhost:8080/transacao/{id}
@@ -72,7 +74,7 @@ Web API feita em Java 8 com o Spring Framework com foco na criação de relaçã
 
 ## Dados JSON
 
-### Correntista/add
+### correntista/add
     {
 	"nome" : "Nome Sobrenome",
 	"documento" : "01234567890",
@@ -109,4 +111,6 @@ Web API feita em Java 8 com o Spring Framework com foco na criação de relaçã
 	"tipo" : "RENDIMENTO",
 	"destinatario" : 2
     }
+
+
 

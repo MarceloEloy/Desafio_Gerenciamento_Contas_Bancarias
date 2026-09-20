@@ -40,7 +40,7 @@ public class ContaService {
     };
 
     @Transactional
-    public void realizarOperacao(Conta contaAlterada){
+    public void alterarSaldo(Conta contaAlterada){
         Conta conta = contaRepository.findById(contaAlterada.getId()).get();
 
         if (conta.getSaldo() != contaAlterada.getSaldo()){

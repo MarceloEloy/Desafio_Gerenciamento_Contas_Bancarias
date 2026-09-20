@@ -1,6 +1,6 @@
 create database banco_contas_bancarias;
 
-use database banco_contas_bancarias;
+use banco_contas_bancarias;
 
 create table correntista(
 
@@ -25,7 +25,7 @@ create table conta(
 create table transacao(
 
                           id BIGINT primary key auto_increment,
-                          tipo ENUM('DEPOSITO', 'SAQUE', 'RENDIMENTO') not null,
+                          tipo ENUM('DEPOSITO', 'SAQUE', 'RENDIMENTO'),
                           valor DECIMAL(10,2) not null,
                           data DATETIME not null,
                           id_conta_remetente BIGINT,

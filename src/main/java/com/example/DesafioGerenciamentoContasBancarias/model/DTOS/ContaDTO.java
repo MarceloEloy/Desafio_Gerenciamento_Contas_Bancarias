@@ -41,11 +41,9 @@ public class ContaDTO {
     private BigDecimal saldo;
 
     @NotNull(message = "Campo {tipo} não deve ser nulo")
-    @NotEmpty(message = "Campo {tipo} não deve ser vazio")
     private TipoConta tipo;
 
     @NotNull(message = "Campo {correntista} não deve ser nulo")
-    @NotEmpty(message = "Campo {correntista} não deve ser vazio")
     private Long correntista;
 
     private List<Transacao> transacoesRemetente;

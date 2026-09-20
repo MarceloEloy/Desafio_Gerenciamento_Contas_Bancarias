@@ -42,6 +42,14 @@ public class TransacaoController {
 
     }
 
+    @Operation(description = "Operação para gerar transação de cobrança de uma taxa de juros sobre uma conta com saldo negativo")
+    @PostMapping(path = "/add/juros")
+    public ResponseEntity addCobrancaDeJuros(@RequestParam Long destinatario, @RequestParam Double taxa) throws URISyntaxException {
+
+        return transacaoService.aplicarJuros(destinatario, taxa);
+
+    }
+
     @Operation(description = "Operação buscar transações passando o id do destinatario da transação")
     @GetMapping(path = "/destinatario/{id}")
     public ResponseEntity<List<Transacao>> getAllByDestinatario(@PathVariable Long id){
