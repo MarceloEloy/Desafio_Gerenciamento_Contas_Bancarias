@@ -35,6 +35,11 @@ public class CorrentistaService {
 
     }
 
+    public ResponseEntity<Correntista> findCorrentistaById(Long id){
+
+        return ResponseEntity.ok(correntistaRepository.findById(id).get());
+    }
+
 
 
 }

@@ -23,7 +23,7 @@ create table conta(
 create table transacao(
 
                           id BIGINT primary key auto_increment,
-                          tipo ENUM('CONTA_POUPANCA', 'CONTA_CORRENTE') not null,
+                          tipo ENUM('DEPOSITO', 'SAQUE', 'RENDIMENTO') not null,
                           valor DECIMAL(10,2) not null,
                           data DATETIME not null,
                           id_conta_remetente BIGINT,

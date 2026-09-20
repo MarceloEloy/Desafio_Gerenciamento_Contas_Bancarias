@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,17 +20,17 @@ public class CorrentistaController {
     private CorrentistaService correntistaService;
 
     @PostMapping(path = "/add")
-    public ResponseEntity<Correntista> addCorrentista(@RequestBody CorrentistaDTO dto) throws URISyntaxException, MalformedURLException {
+    public ResponseEntity<Correntista> addCorrentista(@RequestBody @Valid CorrentistaDTO dto) throws URISyntaxException, MalformedURLException {
 
         return correntistaService.adicionarCorrentista(dto);
 
-    }
+    };
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Correntista> findCorrentistaById(Long id){
+    public ResponseEntity<Correntista> findCorrentistaById(@PathVariable Long id){
 
-        return null;
+        return correntistaService.findCorrentistaById(id);
 
-    }
+    };
 
 }

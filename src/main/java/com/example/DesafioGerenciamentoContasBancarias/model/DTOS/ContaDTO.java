@@ -1,0 +1,47 @@
+package com.example.DesafioGerenciamentoContasBancarias.model.DTOS;
+
+import com.example.DesafioGerenciamentoContasBancarias.model.Conta;
+import com.example.DesafioGerenciamentoContasBancarias.model.Correntista;
+import com.example.DesafioGerenciamentoContasBancarias.model.Transacao;
+import com.example.DesafioGerenciamentoContasBancarias.model.enums.TipoConta;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.util.List;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class ContaDTO {
+    public ContaDTO(Conta conta){
+
+        this.id = conta.getId();
+        this.numero = conta.getNumero();
+        this.saldo = conta.getSaldo();
+        this.tipo = conta.getTipo();
+        this.correntista = conta.getCorrentista();
+        this.transacoesDestinatario = conta.getTransacoesDestinatario();
+        this.transacoesRemetente = conta.getTransacoesRemetente();
+
+    }
+
+    private Long id;
+
+    @NotNull(message = "Campo {numero} não deve ser nulo")
+    private String numero;
+
+    private BigDecimal saldo;
+
+    private TipoConta tipo;
+
+    @NotNull(message = "Campo {correntista} não deve ser nulo")
+    private Correntista correntista;
+
+    private List<Transacao> transacoesRemetente;
+
+    private List<Transacao> transacoesDestinatario;
+
+}

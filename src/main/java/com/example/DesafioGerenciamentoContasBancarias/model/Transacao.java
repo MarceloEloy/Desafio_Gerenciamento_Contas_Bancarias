@@ -1,6 +1,7 @@
 package com.example.DesafioGerenciamentoContasBancarias.model;
 
 import com.example.DesafioGerenciamentoContasBancarias.model.enums.TipoConta;
+import com.example.DesafioGerenciamentoContasBancarias.model.enums.TipoTransacao;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ public class Transacao {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo")
-    private TipoConta tipo;
+    private TipoTransacao tipo;
 
     @Column(name = "valor")
     private BigDecimal valor;
