@@ -37,6 +37,16 @@ public class ContaService {
 
     };
 
+    @Transactional
+    public void realizarOperacao(Conta contaAlterada){
+        Conta conta = contaRepository.findById(contaAlterada.getId()).get();
+
+        if (conta.getSaldo() != contaAlterada.getSaldo()){
+            conta.setSaldo(contaAlterada.getSaldo());
+        };
+
+    }
+
     public ResponseEntity<Conta> findContaById(Long id){
         return ResponseEntity.ok(contaRepository.findById(id).get());
     }
