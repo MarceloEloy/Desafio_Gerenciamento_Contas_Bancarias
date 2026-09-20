@@ -45,4 +45,18 @@ public class TransacaoController {
 
     }
 
+    @GetMapping(path = "/remetente/{id}")
+    public ResponseEntity<List<Transacao>> getAllByRemetente(@PathVariable Long id){
+
+        return transacaoService.findTransacaoByRemetente(id);
+
+    }
+
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<Transacao> getTransacaoById(@PathVariable Long id){
+
+        return transacaoService.findTransacaoById(id);
+
+    }
+
 }

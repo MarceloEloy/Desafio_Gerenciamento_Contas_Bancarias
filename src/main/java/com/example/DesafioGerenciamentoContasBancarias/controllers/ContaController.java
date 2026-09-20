@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URISyntaxException;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/conta")
@@ -17,7 +19,7 @@ public class ContaController {
     private ContaService contaService;
 
     @PostMapping(path = "/add")
-    public ResponseEntity<Conta> addConta(@RequestBody ContaDTO dto) throws URISyntaxException {
+    public ResponseEntity<Conta> addConta(@RequestBody @Valid ContaDTO dto) throws URISyntaxException {
 
         return contaService.adicionarConta(dto);
 
@@ -27,6 +29,13 @@ public class ContaController {
     public ResponseEntity<Conta> findContaById(@PathVariable Long id){
 
         return contaService.findContaById(id);
+
+    };
+
+    @GetMapping(path = "/correntista/{id}")
+    public ResponseEntity<List<Conta>> findAllByCorrentistaId(@PathVariable Long id){
+
+        return contaService.findAllContasByCorrentistaId(id);
 
     }
 

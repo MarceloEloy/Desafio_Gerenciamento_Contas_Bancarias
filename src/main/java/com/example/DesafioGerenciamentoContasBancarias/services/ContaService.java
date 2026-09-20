@@ -1,6 +1,7 @@
 package com.example.DesafioGerenciamentoContasBancarias.services;
 
 import com.example.DesafioGerenciamentoContasBancarias.model.Conta;
+import com.example.DesafioGerenciamentoContasBancarias.model.Correntista;
 import com.example.DesafioGerenciamentoContasBancarias.model.DTOS.ContaDTO;
 import com.example.DesafioGerenciamentoContasBancarias.repositorys.ContaRepository;
 import com.example.DesafioGerenciamentoContasBancarias.repositorys.CorrentistaRepository;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -20,13 +22,13 @@ public class ContaService {
 
     private final ContaRepository contaRepository;
 
-    private final CorrentistaRepository correntistaRepository;
+    private final CorrentistaService correntistaService;
 
     public ResponseEntity<Conta> adicionarConta(ContaDTO dto) throws URISyntaxException {
 
         Conta conta = new Conta(dto);
 
-        conta.setCorrentista(correntistaRepository.findById(dto.getCorrentista()).get());
+        conta.setCorrentista(correntistaService.findCorrentistaById(dto.getCorrentista()).getBody());
 
         conta = contaRepository.save(conta);
 
@@ -48,6 +50,13 @@ public class ContaService {
 
     public ResponseEntity<Conta> findContaById(Long id){
         return ResponseEntity.ok(contaRepository.findById(id).get());
+    }
+
+    public ResponseEntity<List<Conta>> findAllContasByCorrentistaId(Long id){
+
+        Correntista correntista = correntistaService.findCorrentistaById(id).getBody();
+
+        return ResponseEntity.ok(contaRepository.findAllByCorrentista(correntista));
     }
 
 }

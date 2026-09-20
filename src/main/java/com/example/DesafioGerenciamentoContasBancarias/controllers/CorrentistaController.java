@@ -1,5 +1,6 @@
 package com.example.DesafioGerenciamentoContasBancarias.controllers;
 
+import com.example.DesafioGerenciamentoContasBancarias.model.Conta;
 import com.example.DesafioGerenciamentoContasBancarias.model.Correntista;
 import com.example.DesafioGerenciamentoContasBancarias.model.DTOS.CorrentistaDTO;
 import com.example.DesafioGerenciamentoContasBancarias.services.CorrentistaService;
@@ -11,6 +12,7 @@ import javax.validation.Valid;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/correntista")
@@ -32,5 +34,12 @@ public class CorrentistaController {
         return correntistaService.findCorrentistaById(id);
 
     };
+
+    @GetMapping(path = "/{nome}")
+    public ResponseEntity<List<Correntista>> findAllCorrentistaById(@PathVariable String nome){
+
+        return correntistaService.findCorrentistaByName(nome);
+
+    }
 
 }

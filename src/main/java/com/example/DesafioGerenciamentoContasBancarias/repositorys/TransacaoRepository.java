@@ -10,4 +10,6 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
 
     List<Transacao> findAllByDestinatario(Conta conta);
 
+    List<Transacao> findAllByRemetente(Conta conta);
+
 }

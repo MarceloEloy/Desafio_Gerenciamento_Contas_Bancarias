@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 
 @Service
@@ -38,6 +39,11 @@ public class CorrentistaService {
     public ResponseEntity<Correntista> findCorrentistaById(Long id){
 
         return ResponseEntity.ok(correntistaRepository.findById(id).get());
+    }
+
+    public ResponseEntity<List<Correntista>> findCorrentistaByName(String nome){
+
+        return ResponseEntity.ok(correntistaRepository.findAllByNome(nome));
     }
 
 

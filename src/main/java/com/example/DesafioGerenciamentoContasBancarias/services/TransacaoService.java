@@ -35,6 +35,8 @@ public class TransacaoService {
 
     public ResponseEntity adicionarTransacao(TransacaoDTO dto) throws URISyntaxException {
 
+        log.info("Inicializando metodo de transação solo");
+
         this.limite = BigDecimal.valueOf(1000.0);
 
         Transacao transacao = new Transacao(dto);
@@ -46,11 +48,15 @@ public class TransacaoService {
             destinatario.setSaldo(destinatario.getSaldo().add(dto.getValor()));
             contaService.realizarOperacao(destinatario);
 
+            log.info("Realizada operação de deposito na conta [{}]", destinatario.getId());
+
         } else if (transacao.getTipo().equals(TipoTransacao.SAQUE) && destinatario.getTipo().equals(TipoConta.CONTA_CORRENTE)) {
             if (destinatario.getSaldo().add(limite).doubleValue() > dto.getValor().doubleValue()) {
 
                 destinatario.setSaldo(destinatario.getSaldo().subtract(dto.getValor()));
                 contaService.realizarOperacao(destinatario);
+
+                log.info("Realizada operação de saque na conta [{}]", destinatario.getId());
 
             }else {
                 return ResponseEntity.badRequest().body("Valor da transação não pode exceder {saldo: " + destinatario.getSaldo() + " + limite: " + limite + "}");
@@ -60,6 +66,8 @@ public class TransacaoService {
 
                 destinatario.setSaldo(destinatario.getSaldo().subtract(dto.getValor()));
                 contaService.realizarOperacao(destinatario);
+
+                log.info("Realizada operação de deposito na conta [{}]", destinatario.getId());
 
             }else {
                 return ResponseEntity.badRequest().body("Valor da transação não pode exceder {saldo: " + destinatario.getSaldo() + "}");
@@ -78,6 +86,8 @@ public class TransacaoService {
 
     public ResponseEntity adicionarTransacaoEntreContas(TransacaoDTO dto) throws URISyntaxException {
 
+        log.info("Inicializando metodo de transação entre contas");
+
         this.limite = BigDecimal.valueOf(1000.0);
 
         Transacao transacao = new Transacao(dto);
@@ -92,6 +102,8 @@ public class TransacaoService {
                 destinatario.setSaldo(destinatario.getSaldo().add(dto.getValor()));
                 contaService.realizarOperacao(remetente);
                 contaService.realizarOperacao(destinatario);
+
+                log.info("Realizada operação de transação entra as conta [{}] e [{}]", destinatario.getId(), remetente.getId());
             }
             else {
                 return ResponseEntity.badRequest().body("Valor da transação não pode exceder {saldo: " + remetente.getSaldo() + " + limite: " + limite + "}");
@@ -104,6 +116,7 @@ public class TransacaoService {
                 contaService.realizarOperacao(remetente);
                 contaService.realizarOperacao(destinatario);
 
+                log.info("Realizada operação de transação entra as conta [{}] e [{}]", destinatario.getId(), remetente.getId());
             } else {
                 return ResponseEntity.badRequest().body("Valor da transação não pode exceder {saldo: " + remetente.getSaldo() + "}");
             }
@@ -131,6 +144,7 @@ public class TransacaoService {
 
             contaService.realizarOperacao(destinatario);
 
+            log.info("Realizada operação de aplicar rendimento mensal na conta [{}]", destinatario.getId());
         }else {
             return ResponseEntity.badRequest().body("Tipo de conta e(ou) transação errados");
         };
@@ -144,6 +158,10 @@ public class TransacaoService {
         return ResponseEntity.created(uri).body(transacao);
     }
 
+    public ResponseEntity<Transacao> findTransacaoById(Long id){
+        return ResponseEntity.ok(transacaoRepository.findById(id).get());
+    };
+
     public ResponseEntity<List<Transacao>> findTransacaoByDestinatario(Long id){
 
         Conta destinatario = contaService.findContaById(id).getBody();
@@ -151,8 +169,12 @@ public class TransacaoService {
 
     };
 
-    public ResponseEntity<Transacao> findTransacaoById(Long id){
-        return ResponseEntity.ok(transacaoRepository.findById(id).get());
+    public ResponseEntity<List<Transacao>> findTransacaoByRemetente(Long id){
+
+        Conta remetente = contaService.findContaById(id).getBody();
+        return ResponseEntity.ok(transacaoRepository.findAllByDestinatario(remetente));
+
     };
+
 
 }
