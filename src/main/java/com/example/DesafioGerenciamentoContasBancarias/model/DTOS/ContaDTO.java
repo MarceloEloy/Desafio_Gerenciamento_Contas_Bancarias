@@ -22,9 +22,12 @@ public class ContaDTO {
         this.numero = conta.getNumero();
         this.saldo = conta.getSaldo();
         this.tipo = conta.getTipo();
-        this.correntista = conta.getCorrentista();
-        this.transacoesDestinatario = conta.getTransacoesDestinatario();
-        this.transacoesRemetente = conta.getTransacoesRemetente();
+        if (conta.getTransacoesDestinatario() != null) {
+            this.transacoesDestinatario = conta.getTransacoesDestinatario();
+        }
+        if (conta.getTransacoesRemetente() != null) {
+            this.transacoesRemetente = conta.getTransacoesRemetente();
+        }
 
     }
 
@@ -38,7 +41,7 @@ public class ContaDTO {
     private TipoConta tipo;
 
     @NotNull(message = "Campo {correntista} não deve ser nulo")
-    private Correntista correntista;
+    private Long correntista;
 
     private List<Transacao> transacoesRemetente;
 

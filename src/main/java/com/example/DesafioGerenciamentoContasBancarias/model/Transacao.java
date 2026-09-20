@@ -1,7 +1,9 @@
 package com.example.DesafioGerenciamentoContasBancarias.model;
 
+import com.example.DesafioGerenciamentoContasBancarias.model.DTOS.TransacaoDTO;
 import com.example.DesafioGerenciamentoContasBancarias.model.enums.TipoConta;
 import com.example.DesafioGerenciamentoContasBancarias.model.enums.TipoTransacao;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +21,15 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Transacao {
+    public Transacao(TransacaoDTO dto){
+        if (dto.getId() != null) {
+            this.id = dto.getId();
+        }
+        this.data = dto.getData();
+        this.valor = dto.getValor();
+        this.tipo = dto.getTipo();
+
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,10 +47,12 @@ public class Transacao {
 
     @ManyToOne()
     @JoinColumn(name = "id_conta_remetente")
+    @JsonBackReference("remetente")
     private Conta remetente;
 
     @ManyToOne()
     @JoinColumn(name = "id_conta_destinatario")
+    @JsonBackReference("destinatario")
     private Conta destinatario;
 
 }

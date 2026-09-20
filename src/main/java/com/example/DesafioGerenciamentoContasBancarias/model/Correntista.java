@@ -1,6 +1,8 @@
 package com.example.DesafioGerenciamentoContasBancarias.model;
 
 import com.example.DesafioGerenciamentoContasBancarias.model.DTOS.CorrentistaDTO;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,18 +20,15 @@ import java.util.List;
 @NoArgsConstructor
 public class Correntista {
     public Correntista(CorrentistaDTO dto){
-        this.nome = dto.getNome();
-        this.documento = dto.getDocumento();
-        this.contato = dto.getContato();
         if (dto.getId() != null){
-
             this.id = dto.getId();
-
         }
-
         if (dto.getContas() != null){
             this.contas = dto.getContas();
         }
+        this.nome = dto.getNome();
+        this.documento = dto.getDocumento();
+        this.contato = dto.getContato();
 
     }
 
@@ -41,10 +40,10 @@ public class Correntista {
     private String nome;
 
     @Column(name = "documento")
-    String documento;
+    private String documento;
 
     @Column(name = "contato")
-    String contato;
+    private String contato;
 
     @OneToMany(mappedBy = "correntista")
     private List<Conta> contas;

@@ -13,11 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 
-@RequiredArgsConstructor
+
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class CorrentistaService {
 
     private final CorrentistaRepository correntistaRepository;

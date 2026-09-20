@@ -7,8 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 @Data
@@ -33,9 +35,13 @@ public class CorrentistaDTO {
     private String nome;
 
     @NotNull(message = "campo {documento} não deve ser nulo")
+    @NotBlank(message = "campo {documento} não deve ser vazio")
+    @Pattern(regexp = "^\\d{11}$", message = "campo {documento} deve conter 11 digitos")
     private String documento;
 
     @NotNull(message = "campo {contato} não deve ser nulo")
+    @NotEmpty(message = "campo {contato} não dever ser vazio")
+    @Pattern(regexp = "^\\d{10,11}$", message = "campo {contato} deve conter de 10 a 11 digitos")
     private String contato;
 
     private List<Conta> contas;
