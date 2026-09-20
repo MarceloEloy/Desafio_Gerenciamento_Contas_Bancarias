@@ -5,8 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -15,4 +16,24 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Correntista {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "nome")
+    private String nome;
+
+    @Column(name = "documento")
+    String documento;
+
+    @Column(name = "contato")
+    String contato;
+
+    @OneToMany(mappedBy = "correntista")
+    private List<Conta> contas;
+
+
 }
+
+

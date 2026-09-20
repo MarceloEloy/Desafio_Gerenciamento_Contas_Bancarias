@@ -2,7 +2,7 @@ spring:
   application:
     name: DesafioGerenciamentoContasBancarias
   datasource:
-    url:
-    password:
-    username:
-    Driver-class-name:
+    url: jdbc:mysql://localhost:3306/banco_contas_bancarias
+    password: "${DATASOURCE_PASSWORD}"
+    username: "${DATASOURCE_USERNAME}"
+    Driver-class-name: com.mysql.cj.jdbc.Driver
