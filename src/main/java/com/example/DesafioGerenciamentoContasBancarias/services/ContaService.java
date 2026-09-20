@@ -22,7 +22,6 @@ public class ContaService {
 
     private final CorrentistaRepository correntistaRepository;
 
-    @Transactional
     public ResponseEntity<Conta> adicionarConta(ContaDTO dto) throws URISyntaxException {
 
         Conta conta = new Conta(dto);

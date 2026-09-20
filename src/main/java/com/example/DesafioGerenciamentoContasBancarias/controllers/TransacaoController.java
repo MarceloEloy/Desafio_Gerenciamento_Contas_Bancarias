@@ -31,6 +31,13 @@ public class TransacaoController {
 
     }
 
+    @PostMapping(path = "/add/rendimento/{taxa}")
+    public ResponseEntity<Transacao> addRendimentoTransacao(@RequestBody TransacaoDTO dto, @PathVariable Double taxa) throws URISyntaxException {
+
+        return transacaoService.aplicarRendimentoMensal(dto, taxa);
+
+    }
+
     @GetMapping(path = "/destinatario/{id}")
     public ResponseEntity<List<Transacao>> getAllByDestinatario(@PathVariable Long id){
 

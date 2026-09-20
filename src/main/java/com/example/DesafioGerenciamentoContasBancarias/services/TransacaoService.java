@@ -19,6 +19,7 @@ import java.net.URISyntaxException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -118,19 +119,40 @@ public class TransacaoService {
         return ResponseEntity.created(uri).body(transacao);
     };
 
+    public ResponseEntity aplicarRendimentoMensal(TransacaoDTO dto, Double taxa) throws URISyntaxException {
+
+        Transacao transacao = new Transacao(dto);
+
+        Conta destinatario = contaService.findContaById(dto.getDestinatario()).getBody();
+
+        if (destinatario.getTipo().equals(TipoConta.CONTA_POUPANCA) && transacao.getTipo().equals(TipoTransacao.RENDIMENTO)){
+
+            destinatario.setSaldo(destinatario.getSaldo().add(destinatario.getSaldo().multiply(BigDecimal.valueOf(taxa)).divide(BigDecimal.valueOf(100))));
+
+            contaService.realizarOperacao(destinatario);
+
+        }else {
+            return ResponseEntity.badRequest().body("Tipo de conta e(ou) transação errados");
+        };
+
+        transacao.setData(Timestamp.valueOf(LocalDateTime.now()));
+        transacao.setDestinatario(destinatario);
+        transacaoRepository.save(transacao);
+
+        URI uri = new URI("/transacao/" + transacao.getId());
+
+        return ResponseEntity.created(uri).body(transacao);
+    }
+
     public ResponseEntity<List<Transacao>> findTransacaoByDestinatario(Long id){
 
         Conta destinatario = contaService.findContaById(id).getBody();
         return ResponseEntity.ok(transacaoRepository.findAllByDestinatario(destinatario));
 
-    }
+    };
 
     public ResponseEntity<Transacao> findTransacaoById(Long id){
         return ResponseEntity.ok(transacaoRepository.findById(id).get());
-    }
-
-    public BigDecimal definirLimite(ContaDTO dto){
-        return null;
-    }
+    };
 
 }
