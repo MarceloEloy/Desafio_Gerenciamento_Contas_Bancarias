@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
@@ -34,13 +35,17 @@ public class ContaDTO {
     private Long id;
 
     @NotNull(message = "Campo {numero} não deve ser nulo")
+    @NotEmpty(message = "Campo {numero} não deve ser vazio")
     private String numero;
 
     private BigDecimal saldo;
 
+    @NotNull(message = "Campo {tipo} não deve ser nulo")
+    @NotEmpty(message = "Campo {tipo} não deve ser vazio")
     private TipoConta tipo;
 
     @NotNull(message = "Campo {correntista} não deve ser nulo")
+    @NotEmpty(message = "Campo {correntista} não deve ser vazio")
     private Long correntista;
 
     private List<Transacao> transacoesRemetente;
