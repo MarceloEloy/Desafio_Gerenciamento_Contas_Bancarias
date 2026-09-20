@@ -1,3 +1,8 @@
 spring:
   application:
     name: DesafioGerenciamentoContasBancarias
+  datasource:
+    url:
+    password:
+    username:
+    Driver-class-name:
