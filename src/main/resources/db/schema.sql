@@ -1,5 +1,7 @@
 create database banco_contas_bancarias;
 
+use database banco_contas_bancarias;
+
 create table correntista(
 
                             id BIGINT primary key auto_increment,

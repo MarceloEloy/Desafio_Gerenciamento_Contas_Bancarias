@@ -3,6 +3,7 @@ package com.example.DesafioGerenciamentoContasBancarias.controllers;
 import com.example.DesafioGerenciamentoContasBancarias.model.DTOS.TransacaoDTO;
 import com.example.DesafioGerenciamentoContasBancarias.model.Transacao;
 import com.example.DesafioGerenciamentoContasBancarias.services.TransacaoService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ public class TransacaoController {
     @Autowired
     private TransacaoService transacaoService;
 
+    @Operation(description = "Operação para gerar transação em uma única conta")
     @PostMapping(path = "/add/solo")
     public ResponseEntity<Transacao> addTransacao(@RequestBody TransacaoDTO dto) throws URISyntaxException {
 
@@ -24,6 +26,7 @@ public class TransacaoController {
 
     }
 
+    @Operation(description = "Operação para gerar transação entre duas contas")
     @PostMapping(path = "/add/duo")
     public ResponseEntity<Transacao> addTransacaoDuo(@RequestBody TransacaoDTO dto) throws URISyntaxException {
 
@@ -31,6 +34,7 @@ public class TransacaoController {
 
     }
 
+    @Operation(description = "Operação para gerar transação recebendo uma taxa para aplicar o rendimento em contas do tipo 'CONTA_POUPANCA'")
     @PostMapping(path = "/add/rendimento/{taxa}")
     public ResponseEntity<Transacao> addRendimentoTransacao(@RequestBody TransacaoDTO dto, @PathVariable Double taxa) throws URISyntaxException {
 
@@ -38,6 +42,7 @@ public class TransacaoController {
 
     }
 
+    @Operation(description = "Operação buscar transações passando o id do destinatario da transação")
     @GetMapping(path = "/destinatario/{id}")
     public ResponseEntity<List<Transacao>> getAllByDestinatario(@PathVariable Long id){
 
@@ -45,6 +50,7 @@ public class TransacaoController {
 
     }
 
+    @Operation(description = "Operação buscar transações passando o id do remetente da transação")
     @GetMapping(path = "/remetente/{id}")
     public ResponseEntity<List<Transacao>> getAllByRemetente(@PathVariable Long id){
 
@@ -52,6 +58,7 @@ public class TransacaoController {
 
     }
 
+    @Operation(description = "Operação buscar uma transação passando o id da transação")
     @GetMapping(path = "/{id}")
     public ResponseEntity<Transacao> getTransacaoById(@PathVariable Long id){
 

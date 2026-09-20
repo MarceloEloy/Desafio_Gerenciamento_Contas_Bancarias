@@ -4,6 +4,7 @@ import com.example.DesafioGerenciamentoContasBancarias.model.Conta;
 import com.example.DesafioGerenciamentoContasBancarias.model.Correntista;
 import com.example.DesafioGerenciamentoContasBancarias.model.DTOS.CorrentistaDTO;
 import com.example.DesafioGerenciamentoContasBancarias.services.CorrentistaService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ public class CorrentistaController {
     @Autowired
     private CorrentistaService correntistaService;
 
+    @Operation(description = "Operação para gerar correntistas")
     @PostMapping(path = "/add")
     public ResponseEntity<Correntista> addCorrentista(@RequestBody @Valid CorrentistaDTO dto) throws URISyntaxException, MalformedURLException {
 
@@ -28,6 +30,7 @@ public class CorrentistaController {
 
     };
 
+    @Operation(description = "Operação para buscar um correntistas passando seu id no caminho do endpoint")
     @GetMapping(path = "/{id}")
     public ResponseEntity<Correntista> findCorrentistaById(@PathVariable Long id){
 
@@ -35,6 +38,7 @@ public class CorrentistaController {
 
     };
 
+    @Operation(description = "Operação para buscar um correntistas passando seu nome no caminho do endpoint")
     @GetMapping(path = "/{nome}")
     public ResponseEntity<List<Correntista>> findAllCorrentistaById(@PathVariable String nome){
 

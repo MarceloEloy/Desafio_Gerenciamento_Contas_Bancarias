@@ -31,9 +31,12 @@ public class Conta {
         }
         if (dto.getTransacoesRemetente() != null){
             this.transacoesRemetente = dto.getTransacoesRemetente();
+        }if (dto.getSaldo() != null){
+            this.saldo = dto.getSaldo();
+        } else if (dto.getSaldo() == null) {
+            this.setSaldo(BigDecimal.ZERO);
         }
         this.numero = dto.getNumero();
-        this.saldo = dto.getSaldo();
         this.tipo = dto.getTipo();
 
     }
@@ -63,9 +66,4 @@ public class Conta {
     @OneToMany(mappedBy = "destinatario")
     private List<Transacao> transacoesDestinatario;
 
-
-    @Override
-    public String toString() {
-        return super.toString();
-    }
 }
