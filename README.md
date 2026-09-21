@@ -17,9 +17,10 @@ descrição de oque todos os métodos fazem no swagger, endpoints para cobrar ju
 ## Instruções de execução
 
 1. Cópiar o schema.sql da pasta src/main/resources/db para dentro do Mysql;
-2. Entrar no aplicativo de teste de API (Insomnia, Postman, etc...) ou acessar o endpoint do swagger disponibilizado na sessão de 'Endpoints'.
-3. Inseririr os dados disponibilizados  na sessão de 'Dados JSON' dentro do campo data
-4. Fazer a requisição HTTP seguindo a orientação na sessão de 'Endpoints'
+2. Alterar as propriedades "password" e "username" do datasource no application.yml para se ajustar com ambiente local."
+3. Entrar no aplicativo de teste de API (Insomnia, Postman, etc...) ou acessar o endpoint do swagger disponibilizado na sessão de 'Endpoints'.
+4. Inseririr os dados disponibilizados  na sessão de 'Dados JSON' dentro do campo data
+5. Fazer a requisição HTTP seguindo a orientação na sessão de 'Endpoints'
 
 ## Endpoints
 
