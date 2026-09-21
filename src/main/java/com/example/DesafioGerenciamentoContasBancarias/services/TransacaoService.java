@@ -220,7 +220,7 @@ public class TransacaoService {
     public ResponseEntity<List<Transacao>> findTransacaoByRemetente(Long id){
 
         Conta remetente = contaService.findContaById(id).getBody();
-        return ResponseEntity.ok(transacaoRepository.findAllByDestinatario(remetente));
+        return ResponseEntity.ok(transacaoRepository.findAllByRemetente(remetente));
 
     };
 
