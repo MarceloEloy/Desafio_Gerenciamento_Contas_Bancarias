@@ -47,7 +47,7 @@ public class TransacaoService {
             log.info("Realizada operação de deposito na conta [{}]", destinatario.getId());
 
         } else if (transacao.getTipo().equals(TipoTransacao.SAQUE) && destinatario.getTipo().equals(TipoConta.CONTA_CORRENTE)) {
-            if (destinatario.getSaldo().add(limite).doubleValue() > dto.getValor().doubleValue()) {
+            if (destinatario.getSaldo().add(limite).doubleValue() >= dto.getValor().doubleValue()) {
 
                 destinatario.setSaldo(destinatario.getSaldo().subtract(dto.getValor()));
                 contaService.alterarSaldo(destinatario);
@@ -58,7 +58,7 @@ public class TransacaoService {
                 return ResponseEntity.badRequest().body("Valor da transação não pode exceder {saldo: " + destinatario.getSaldo() + " + limite: " + limite + "}");
             }
         } else if (transacao.getTipo().equals(TipoTransacao.SAQUE) && destinatario.getTipo().equals(TipoConta.CONTA_POUPANCA)) {
-            if (destinatario.getSaldo().doubleValue() > dto.getValor().doubleValue()){
+            if (destinatario.getSaldo().doubleValue() >= dto.getValor().doubleValue()){
 
                 destinatario.setSaldo(destinatario.getSaldo().subtract(dto.getValor()));
                 contaService.alterarSaldo(destinatario);
@@ -92,7 +92,7 @@ public class TransacaoService {
         Conta remetente = contaService.findContaById(dto.getRemetente()).getBody();
 
         if (remetente.getTipo().equals(TipoConta.CONTA_CORRENTE)){
-            if (remetente.getSaldo().add(limite).doubleValue() > dto.getValor().doubleValue()){
+            if (remetente.getSaldo().add(limite).doubleValue() >= dto.getValor().doubleValue()){
 
                 try {
                     remetente.setSaldo(remetente.getSaldo().subtract(dto.getValor()));
@@ -145,7 +145,11 @@ public class TransacaoService {
 
         if (destinatario.getSaldo().doubleValue() < 0 && taxa > 0){
 
-            destinatario.setSaldo(destinatario.getSaldo().subtract(destinatario.getSaldo()).multiply(BigDecimal.valueOf(taxa)).divide(BigDecimal.valueOf(-100)));
+            BigDecimal valorJuros = destinatario.getSaldo().multiply(BigDecimal.valueOf(taxa).divide(BigDecimal.valueOf(100)));
+
+            transacao.setValor(valorJuros);
+
+            destinatario.setSaldo(destinatario.getSaldo().add(valorJuros));
             contaService.alterarSaldo(destinatario);
 
             transacao.setData(Timestamp.valueOf(LocalDateTime.now()));
@@ -156,7 +160,7 @@ public class TransacaoService {
 
             return ResponseEntity.created(uri).body(transacao);
         }else{
-            return ResponseEntity.badRequest().body("Saldo necessita ser negativo e porcentagem necessita ser positiva");
+            return ResponseEntity.badRequest().body("Saldo necessita ser negativo e taxa necessita ser positiva");
         }
     }
 
@@ -168,7 +172,11 @@ public class TransacaoService {
 
         if (destinatario.getTipo().equals(TipoConta.CONTA_POUPANCA) && transacao.getTipo().equals(TipoTransacao.RENDIMENTO)){
 
-            destinatario.setSaldo(destinatario.getSaldo().add(destinatario.getSaldo().multiply(BigDecimal.valueOf(taxa)).divide(BigDecimal.valueOf(100))));
+            BigDecimal valorRendimento = destinatario.getSaldo().add(destinatario.getSaldo().multiply(BigDecimal.valueOf(taxa)).divide(BigDecimal.valueOf(100)));
+
+            transacao.setValor(valorRendimento.subtract(destinatario.getSaldo()));
+
+            destinatario.setSaldo(valorRendimento);
 
             contaService.alterarSaldo(destinatario);
 

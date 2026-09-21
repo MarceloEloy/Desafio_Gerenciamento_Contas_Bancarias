@@ -80,6 +80,12 @@ Web API feita em Java 8 com o Spring Framework com foco na criação de relaçã
 	"documento" : "01234567890",
 	"contato" : "01234567890"
     }
+****
+    {
+    "nome" : "Nome Sobrenome",
+    "documento" : "00000000000",
+    "contato" : "00000000000"
+    }
 ### conta/add
     {
 	"numero" : "123",
@@ -99,6 +105,12 @@ Web API feita em Java 8 com o Spring Framework com foco na criação de relaçã
 	"tipo" : "DEPOSITO",
 	"valor" : 100.00,
 	"destinatario" : 1
+    }
+***
+    {
+    "tipo" : "SAQUE",
+    "valor" : 500.00,
+    "destinatario" : 1
     }
 ### transacao/add/duo
     {
