@@ -5,6 +5,10 @@
 Web API feita em Java 8 com o Spring Framework com foco na criação de relação entre entidade, sendo estas 
 "Correntista", "Conta" e "Transacao", integrado com o banco de dados MySQL, Swagger OpenAPI para documentação e Git/Github para versionamento de códgio.
 
+## Link do vídeo apresentação 
+
+https://www.youtube.com/watch?v=i68Xkw3CsJ0
+
 ## Instruções de execução
 
 1. Cópiar o schema.sql da pasta src/main/resources/db para dentro do Mysql;
