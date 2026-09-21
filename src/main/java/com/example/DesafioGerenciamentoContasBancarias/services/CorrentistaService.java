@@ -3,7 +3,6 @@ package com.example.DesafioGerenciamentoContasBancarias.services;
 import com.example.DesafioGerenciamentoContasBancarias.model.Correntista;
 import com.example.DesafioGerenciamentoContasBancarias.model.DTOS.CorrentistaDTO;
 import com.example.DesafioGerenciamentoContasBancarias.repositorys.CorrentistaRepository;
-import com.sun.jndi.toolkit.url.Uri;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
