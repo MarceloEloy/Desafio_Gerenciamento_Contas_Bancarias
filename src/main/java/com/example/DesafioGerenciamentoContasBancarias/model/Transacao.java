@@ -22,9 +22,6 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 public class Transacao {
     public Transacao(TransacaoDTO dto){
-        if (dto.getId() != null) {
-            this.id = dto.getId();
-        }
         this.data = dto.getData();
         this.valor = dto.getValor();
         this.tipo = dto.getTipo();

@@ -20,9 +20,6 @@ import java.util.List;
 @NoArgsConstructor
 public class Correntista {
     public Correntista(CorrentistaDTO dto){
-        if (dto.getId() != null){
-            this.id = dto.getId();
-        }
         if (dto.getContas() != null){
             this.contas = dto.getContas();
         }

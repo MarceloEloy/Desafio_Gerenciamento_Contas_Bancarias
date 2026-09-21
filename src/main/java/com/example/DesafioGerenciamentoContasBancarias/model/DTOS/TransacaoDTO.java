@@ -14,7 +14,6 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 public class TransacaoDTO {
     public TransacaoDTO(Transacao transacao){
-        this.id = transacao.getId();
         this.data = transacao.getData();
         this.valor = transacao.getValor();
 
@@ -26,7 +25,6 @@ public class TransacaoDTO {
         }
     }
 
-    private Long id;
 
     private TipoTransacao tipo;
 

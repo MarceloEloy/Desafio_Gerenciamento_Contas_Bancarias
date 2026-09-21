@@ -39,7 +39,7 @@ public class CorrentistaController {
     };
 
     @Operation(description = "Operação para buscar um correntistas passando seu nome no caminho do endpoint")
-    @GetMapping(path = "/{nome}")
+    @GetMapping(path = "/nome/{nome}")
     public ResponseEntity<List<Correntista>> findAllCorrentistaById(@PathVariable String nome){
 
         return correntistaService.findCorrentistaByName(nome);

@@ -22,10 +22,6 @@ import java.util.List;
 @NoArgsConstructor
 public class Conta {
     public Conta(ContaDTO dto){
-
-        if (dto.getId() != null){
-            this.id = dto.getId();
-        };
         if (dto.getTransacoesDestinatario() != null){
             this.transacoesDestinatario = dto.getTransacoesDestinatario();
         }

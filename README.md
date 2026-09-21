@@ -41,7 +41,7 @@ descrição de oque todos os métodos fazem no swagger, endpoints para cobrar ju
 
 #### http://localhost:8080/correntista/{id}
 
-#### http://localhost:8080/correntista/{nome}
+#### http://localhost:8080/correntista/nome/{nome}
 
 <hr>
 
