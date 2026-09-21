@@ -21,7 +21,7 @@ public class ContaController {
 
     @Operation(description = "Operação para gerar conta")
     @PostMapping(path = "/add")
-    public ResponseEntity<Conta> addConta(@RequestBody @Valid ContaDTO dto) throws URISyntaxException {
+    public ResponseEntity addConta(@RequestBody @Valid ContaDTO dto) throws URISyntaxException {
 
         return contaService.adicionarConta(dto);
 

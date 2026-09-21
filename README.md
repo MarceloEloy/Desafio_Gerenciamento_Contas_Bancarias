@@ -9,6 +9,11 @@ Web API feita em Java 8 com o Spring Framework com foco na criação de relaçã
 
 https://www.youtube.com/watch?v=i68Xkw3CsJ0
 
+## O que foi feito, o que ficou de fora e por quê
+
+Todas as classes com seus endpoints de criação e mais de uma forma de consulta, retorno com mais clareza de mensagens de erro 400,
+descrição de oque todos os métodos fazem no swagger, endpoints para cobrar juros, aplicar rendimento e para realizar transação entre duas contas.
+
 ## Instruções de execução
 
 1. Cópiar o schema.sql da pasta src/main/resources/db para dentro do Mysql;

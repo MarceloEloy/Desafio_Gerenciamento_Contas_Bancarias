@@ -39,6 +39,10 @@ public class TransacaoService {
 
         Conta destinatario = contaService.findContaById(dto.getDestinatario()).getBody();
 
+        if (transacao.getValor().doubleValue() <= 0){
+            return ResponseEntity.badRequest().body("Valor da transação não deve ser menor ou igual a 0");
+        }
+
         if (transacao.getTipo().equals(TipoTransacao.DEPOSITO)){
 
             destinatario.setSaldo(destinatario.getSaldo().add(dto.getValor()));
@@ -139,6 +143,8 @@ public class TransacaoService {
 
     public ResponseEntity aplicarJuros(Long destinatarioId, Double taxa) throws URISyntaxException {
 
+        log.info("Inicializando operação de aplicação de juros");
+
         Transacao transacao = new Transacao();
 
         Conta destinatario = contaService.findContaById(destinatarioId).getBody();
@@ -148,23 +154,28 @@ public class TransacaoService {
             BigDecimal valorJuros = destinatario.getSaldo().multiply(BigDecimal.valueOf(taxa).divide(BigDecimal.valueOf(100)));
 
             transacao.setValor(valorJuros);
+            log.info("Realizada operação de aplicação de juros ");
 
             destinatario.setSaldo(destinatario.getSaldo().add(valorJuros));
+
             contaService.alterarSaldo(destinatario);
 
-            transacao.setData(Timestamp.valueOf(LocalDateTime.now()));
-            transacao.setDestinatario(destinatario);
-            transacaoRepository.save(transacao);
-
-            URI uri = new URI("/transacao/" + transacao.getId());
-
-            return ResponseEntity.created(uri).body(transacao);
         }else{
             return ResponseEntity.badRequest().body("Saldo necessita ser negativo e taxa necessita ser positiva");
         }
+
+        transacao.setData(Timestamp.valueOf(LocalDateTime.now()));
+        transacao.setDestinatario(destinatario);
+        transacaoRepository.save(transacao);
+
+        URI uri = new URI("/transacao/" + transacao.getId());
+
+        return ResponseEntity.created(uri).body(transacao);
     }
 
     public ResponseEntity aplicarRendimentoMensal(TransacaoDTO dto, Double taxa) throws URISyntaxException {
+
+        log.info("Inicializando operação de aplicação de rendimento mensal");
 
         Transacao transacao = new Transacao(dto);
 
@@ -177,6 +188,7 @@ public class TransacaoService {
             transacao.setValor(valorRendimento.subtract(destinatario.getSaldo()));
 
             destinatario.setSaldo(valorRendimento);
+            log.info("Realizada operação de aplicação de rendimento mensal ");
 
             contaService.alterarSaldo(destinatario);
 

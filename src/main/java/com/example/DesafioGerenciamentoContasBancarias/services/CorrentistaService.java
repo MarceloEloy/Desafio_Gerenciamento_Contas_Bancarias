@@ -26,6 +26,8 @@ public class CorrentistaService {
     @Transactional
     public ResponseEntity<Correntista> adicionarCorrentista(CorrentistaDTO dto) throws URISyntaxException, MalformedURLException {
 
+        log.info("Inicializando operação de criação de correntista");
+
         Correntista correntista = new Correntista(dto);
 
         correntista = correntistaRepository.save(correntista);

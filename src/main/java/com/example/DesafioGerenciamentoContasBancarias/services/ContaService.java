@@ -25,9 +25,15 @@ public class ContaService {
 
     private final CorrentistaService correntistaService;
 
-    public ResponseEntity<Conta> adicionarConta(ContaDTO dto) throws URISyntaxException {
+    public ResponseEntity adicionarConta(ContaDTO dto) throws URISyntaxException {
+
+        log.info("Inicializando operação de criação de conta");
 
         Conta conta = new Conta(dto);
+
+        if (conta.getSaldo().doubleValue() < 0){
+            return ResponseEntity.badRequest().body("Saldo não deve ser menor que 0");
+        }
 
         conta.setCorrentista(correntistaService.findCorrentistaById(dto.getCorrentista()).getBody());
 
